@@ -28,4 +28,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## DeepScan - Quality of the Code (https://deepscan.io/)
 
-[![DeepScan grade](https://deepscan.io/dashboard#view=project&tid=19884&pid=25647&bid=804500)
+[![DeepScan grade](https://deepscan.io/api/teams/19884/projects/25647/branches/804500/badge/grade.svg)](https://deepscan.io/dashboard#view=project&tid=19884&pid=25647&bid=804500)
