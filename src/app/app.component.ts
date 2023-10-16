@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'checklist-app';
+
+  public events: string[] = [];
+  public opened: boolean = false;
+
 }
