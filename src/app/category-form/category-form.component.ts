@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Category } from '../_models/category';
 
 @Component({
   selector: 'app-category-form',
@@ -8,22 +9,29 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 })
 export class CategoryFormComponent {
 
-  public actionName = 'Editar';
+  @Input() public actionName = 'Editar';
+
   public categoryForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder){
-    this.categoryForm = formBuilder.group({
-      name: 'Carlos',
-      age: '33',
-      profession: 'Programador',
+  @Output() closeModalEventEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  @Input() public editableCategory!: Category;
+
+  constructor(private formBuilder: FormBuilder){}
+
+  ngOnInit() {
+    this.categoryForm = this.formBuilder.group({
+      name: [this.editableCategory != null ? this.editableCategory.name : '', Validators.required],
     });
   }
 
   public cancel(){
     console.log('Cancelar clicado');
+    this.closeModalEventEmitter.emit(true);
   }
 
   public save(){
     console.log('Salvar clicado');
+    this.closeModalEventEmitter.emit(true);
   }
 }

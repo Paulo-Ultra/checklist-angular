@@ -27,34 +27,26 @@ export class CategoryComponent {
   public editCategory(inputCategory: Category) {
     this.dialog.open(CategoryEditComponent, { disableClose: true, data: {
       editableCategory: inputCategory
-    }}).afterClosed().subscribe(
-      resp => {
-        if(resp) {
-          console.log('Categoria apagada com sucesso!');
-        } else{
-        console.log('Categoria não apagada!');
-        }
-      }
-    )
+    }}).afterClosed().subscribe( resp => {
+        console.log('Modal Editar Fechada');
+      });
   }
-
 
   public deleteCategory(category: Category) {
   this.dialog.open(DialogComponent, { disableClose: true, data: {
     dialogMsg: 'Você tem certeza que gostaria de apagar a categoria?',
      leftButtonLabel: 'Cancelar', rightButtonLabel: 'Ok'
-  }}).afterClosed().subscribe(
-    resp => {
-      if(resp) {
-        console.log('Categoria apagada com sucesso!');
-      } else{
-      console.log('Categoria não apagada!');
-      }
-    }
-  )
+  }}).afterClosed().subscribe(resp => {
+        console.log('Modal Apagar Fechada');
+  });
 }
 
   public createNewCategory(){
     console.log('create new category clicked');
+
+    this.dialog.open(CategoryEditComponent, { disableClose: true, data: {actionName: 'Criar'}
+  }).afterClosed().subscribe( resp => {
+        console.log('Modal Criar Fechada');
+      });
   }
 }
