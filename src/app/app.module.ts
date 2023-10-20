@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { CategoryEditComponent } from './category-edit/category-edit.component';
+import { CategoryFormComponent } from './category-form/category-form.component';
 import { CategoryComponent } from './category/category.component';
-import { HeaderComponent } from './header/header.component';
-import { FormsModule } from '@angular/forms';
-import { MaterialModule } from './material.module';
+import { DialogComponent } from './dialog/dialog.component';
 import { FooterComponent } from './footer/footer.component';
+import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
+import { MaterialModule } from './material.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
@@ -19,14 +22,18 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    DialogComponent,
+    CategoryEditComponent,
+    CategoryFormComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
