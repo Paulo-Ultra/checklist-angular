@@ -6,5 +6,5 @@ export class ChecklistItem {
   public description!: string;
   public deadline!: Date;
   public postDate!: Date;
-  public Category!: Category;
+  public category!: Category;
 }

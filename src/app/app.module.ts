@@ -8,13 +8,15 @@ import { AppComponent } from './app.component';
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import { CategoryFormComponent } from './category-form/category-form.component';
 import { CategoryComponent } from './category/category.component';
+import { ChecklistEditComponent } from './checklist-edit/checklist-edit.component';
+import { ChecklistComponent } from './checklist/checklist.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { FooterComponent } from './footer/footer.component';
 import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { MaterialModule } from './material.module';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-import { ChecklistComponent } from './checklist/checklist.component';
+import { ChecklistFormComponent } from './checklist-form/checklist-form.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,9 @@ import { ChecklistComponent } from './checklist/checklist.component';
     CategoryEditComponent,
     CategoryFormComponent,
     ChecklistComponent,
+    ChecklistEditComponent,
+    ChecklistFormComponent,
+
   ],
   imports: [
     BrowserModule,
