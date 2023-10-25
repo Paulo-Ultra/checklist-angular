@@ -1,9 +1,10 @@
-import { Component, Inject } from '@angular/core';
-import { CATEGORY_DATA } from '../category/category.component';
+import { Component } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+
 import { ChecklistItem } from '../_models/checklist_item';
-import { DialogComponent } from '../dialog/dialog.component';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { CATEGORY_DATA } from '../category/category.component';
 import { ChecklistEditComponent } from '../checklist-edit/checklist-edit.component';
+import { DialogComponent } from '../dialog/dialog.component';
 
 export const CHECKLIST_DATA = [
   { guid: 'aaa-bbb-ccc-ddd', completed: false, description: 'Ir ao oftamologista',

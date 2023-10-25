@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 
-import { ChecklistItem } from '../_models/checklist_item';
 import { Category } from '../_models/category';
+import { ChecklistItem } from '../_models/checklist_item';
 import { CATEGORY_DATA } from '../category/category.component';
 
 @Component({
