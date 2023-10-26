@@ -2,20 +2,10 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ChecklistItem } from '../_models/checklist_item';
-import { CATEGORY_DATA } from '../category/category.component';
 import { ChecklistEditComponent } from '../checklist-edit/checklist-edit.component';
 import { DialogComponent } from '../dialog/dialog.component';
-
-export const CHECKLIST_DATA = [
-  { guid: 'aaa-bbb-ccc-ddd', completed: false, description: 'Ir ao oftamologista',
-  deadline: Date.now(), postDate: Date.now(), category: CATEGORY_DATA.find(
-    x => x.name == 'Saúde' )},
-
-    { guid: 'aaa-bbb-ccc-ddd', completed: true, description: 'Reunião com gerente regional',
-    deadline: Date.now(), postDate: Date.now(), category: CATEGORY_DATA.find(
-      x => x.name == 'Trabalho' )},
-];
-
+import { ChecklistService } from '../service/checklist.service';
+import { SnackBarService } from '../service/snack-bar.service';
 
 @Component({
   selector: 'app-checklist',
@@ -24,12 +14,20 @@ export const CHECKLIST_DATA = [
 })
 export class ChecklistComponent {
 
-  public dataSource = CHECKLIST_DATA;
+  public dataSource: ChecklistItem[] = [];
   public displayedColumns: string[] = [
     'id', 'completed', 'description', 'deadline', 'postDate', 'category', 'actions'
   ];
 
-  constructor(private dialog: MatDialog){}
+  constructor(private dialog: MatDialog,
+              private checklistService: ChecklistService,
+              private snackBarService: SnackBarService){}
+  ngOnInit() {
+    this.checklistService.getAllChecklistItems().subscribe(
+      (resp: ChecklistItem[]) => {
+        this.dataSource = resp;
+      });
+  }
 
   public createNewItem(){
     console.log('Novo Item do checklist clicado');
@@ -37,6 +35,9 @@ export class ChecklistComponent {
       disableClose: true, data: { actionName: 'Criar'},
     }).afterClosed().subscribe(resp => {
       console.log('Fechando modal da criação do item do checklist');
+      if (resp) {
+        this.snackBarService.showSnackBar('Item do checklist criado com sucesso!', 'Ok');
+      }
     });
   }
 
@@ -50,6 +51,9 @@ export class ChecklistComponent {
       disableClose: true, data: { updatableChecklistItem: checklistItem, actionName: 'Editar'},
     }).afterClosed().subscribe(resp => {
       console.log('Fechando modal da edição do item do checklist');
+      if (resp) {
+        this.snackBarService.showSnackBar('Item do checklist editado com sucesso!', 'Ok');
+      }
     });
   }
 
@@ -57,9 +61,12 @@ export class ChecklistComponent {
     console.log('Item do checklist excluído');
     this.dialog.open(DialogComponent, {
       disableClose: true, data: {dialogMsg: 'Você deseja realmente apagar esse item?',
-      leftButtonLabel: 'Cancelar', rightButtonLabel: 'Ok'}
+      leftButtonLabe: 'Cancelar', rightButtonLabel: 'Ok'}
     }).afterClosed().subscribe(resp => {
-      console.log('Janela modal confirmar apagar')
+      console.log('Janela modal confirmar apagar');
+      if (resp) {
+        this.snackBarService.showSnackBar('Item do checklist apagado com sucesso!', 'Ok');
+      }
     });
   }
 }

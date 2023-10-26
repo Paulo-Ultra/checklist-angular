@@ -1,15 +1,11 @@
 import { Component } from '@angular/core';
-import { Category } from '../_models/category';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from '../dialog/dialog.component';
-import { CategoryEditComponent } from '../category-edit/category-edit.component';
 
-export const CATEGORY_DATA = [
-  { name: 'Educação', guid: 'aaa-bbb-ccc-ddd' },
-  { name: 'Saúde', guid: 'aaa-bbb-ccc-ddd' },
-  { name: 'Trabalho', guid: 'aaa-bbb-ccc-ddd' },
-  { name: 'Outros', guid: 'aaa-bbb-ccc-ddd' }
-];
+import { Category } from '../_models/category';
+import { CategoryEditComponent } from '../category-edit/category-edit.component';
+import { DialogComponent } from '../dialog/dialog.component';
+import { CategoryService } from '../service/category.service';
+import { SnackBarService } from '../service/snack-bar.service';
 
 @Component({
   selector: 'app-category',
@@ -18,17 +14,28 @@ export const CATEGORY_DATA = [
 })
 export class CategoryComponent {
 
-  constructor(private dialog: MatDialog){}
-
   public displayedColumns: string[] = ['id', 'name', 'actions'];
-  public dataSource: Category[] = CATEGORY_DATA;
+  public dataSource: Category[] = [];
 
+  constructor(private dialog: MatDialog,
+              private categoryService: CategoryService,
+              private snackBarService: SnackBarService){}
+
+  ngOnInit() {
+    this.categoryService.getAllCategories().subscribe(
+      (resp: Category[]) => {
+        this.dataSource = resp;
+      });
+    }
 
   public editCategory(inputCategory: Category) {
     this.dialog.open(CategoryEditComponent, { disableClose: true, data: {
       editableCategory: inputCategory
     }}).afterClosed().subscribe( resp => {
         console.log('Modal Editar Fechada');
+        if (resp) {
+          this.snackBarService.showSnackBar('Categoria editada com sucesso!', 'Ok');
+        }
       });
   }
 
@@ -37,7 +44,11 @@ export class CategoryComponent {
     dialogMsg: 'Você tem certeza que gostaria de apagar a categoria?',
      leftButtonLabel: 'Cancelar', rightButtonLabel: 'Ok'
   }}).afterClosed().subscribe(resp => {
-        console.log('Modal Apagar Fechada');
+    console.log('Modal Apagar Fechada');
+    if (resp) {
+      this.snackBarService.showSnackBar('Categoria apagada com sucesso!', 'Ok');
+    }
+
   });
 }
 
@@ -47,6 +58,9 @@ export class CategoryComponent {
     this.dialog.open(CategoryEditComponent, { disableClose: true, data: {actionName: 'Criar'}
   }).afterClosed().subscribe( resp => {
         console.log('Modal Criar Fechada');
+        if (resp) {
+          this.snackBarService.showSnackBar('Categoria criada com sucesso!', 'Ok');
+        }
       });
   }
 }

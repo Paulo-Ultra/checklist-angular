@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular
 
 import { Category } from '../_models/category';
 import { ChecklistItem } from '../_models/checklist_item';
-import { CATEGORY_DATA } from '../category/category.component';
+import { CategoryService } from '../service/category.service';
 
 @Component({
   selector: 'app-checklist-form',
@@ -18,13 +18,22 @@ export class ChecklistFormComponent {
 
   @ViewChild(FormGroupDirective) checklistGroupFormDirective!: FormGroupDirective;
 
-  public categories: Category[] = CATEGORY_DATA;
+  public categories: Category[] = [];
 
   public checklistForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder,
+              private categoryService: CategoryService) { }
 
   ngOnInit() {
+    this.categoryService.getAllCategories().subscribe(
+      (resp: Category[]) => {
+        this.categories = resp;
+        this.createForm();
+      });
+  }
+
+  private createForm(){
     this.checklistForm = this.formBuilder.group({
       completed: [this.checklistItem != null ? this.checklistItem.completed : false,
         Validators.required],

@@ -26,7 +26,6 @@ export class ChecklistEditComponent {
      }
 
   public closeForm($event: any){
-    this.modalRef.close($event);
+    if($event != null) this.modalRef.close($event);
   }
-
 }
