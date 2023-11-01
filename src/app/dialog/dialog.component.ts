@@ -29,11 +29,11 @@ export class DialogComponent {
   public rightButtonLabel = 'Ok';
 
 
-  public clickLeftButton() {
+  public cancelAction() {
     this.dialogRef.close(false);
   }
 
-  public clickRightButton() {
+  public confirmAction() {
     this.dialogRef.close(true);
   }
 }

@@ -21,19 +21,26 @@ export class CategoryComponent {
               private categoryService: CategoryService,
               private snackBarService: SnackBarService){}
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.loadAllCategories();
+  }
+
+  private loadAllCategories(){
     this.categoryService.getAllCategories().subscribe(
       (resp: Category[]) => {
         this.dataSource = resp;
+      }, (error: any) => {
+        console.log(`Um erro ocorreu para chamar a API: , ${error}`);
       });
-    }
+  }
+
 
   public editCategory(inputCategory: Category) {
     this.dialog.open(CategoryEditComponent, { disableClose: true, data: {
       editableCategory: inputCategory
     }}).afterClosed().subscribe( resp => {
-        console.log('Modal Editar Fechada');
         if (resp) {
+          this.loadAllCategories();
           this.snackBarService.showSnackBar('Categoria editada com sucesso!', 'Ok');
         }
       });
@@ -44,21 +51,23 @@ export class CategoryComponent {
     dialogMsg: 'Você tem certeza que gostaria de apagar a categoria?',
      leftButtonLabel: 'Cancelar', rightButtonLabel: 'Ok'
   }}).afterClosed().subscribe(resp => {
-    console.log('Modal Apagar Fechada');
     if (resp) {
-      this.snackBarService.showSnackBar('Categoria apagada com sucesso!', 'Ok');
+      this.categoryService.deleteCategory(category.guid).subscribe(
+        (resp: any) => {
+          this.loadAllCategories();
+          this.snackBarService.showSnackBar('Categoria apagada com sucesso!', 'Ok');
+        }, (err: any) => {
+          this.snackBarService.showSnackBar('Não é possível apagar a categoria, pois está em uso por um item do checklist.', 'Ok');
+        });
     }
-
   });
 }
 
   public createNewCategory(){
-    console.log('create new category clicked');
-
     this.dialog.open(CategoryEditComponent, { disableClose: true, data: {actionName: 'Criar'}
   }).afterClosed().subscribe( resp => {
-        console.log('Modal Criar Fechada');
         if (resp) {
+          this.loadAllCategories();
           this.snackBarService.showSnackBar('Categoria criada com sucesso!', 'Ok');
         }
       });

@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { Category } from '../_models/category';
+import { CategoryService } from '../service/category.service';
+import { SnackBarService } from '../service/snack-bar.service';
 
 @Component({
   selector: 'app-category-form',
@@ -17,7 +19,14 @@ export class CategoryFormComponent {
 
   @Input() public editableCategory!: Category;
 
-  constructor(private formBuilder: FormBuilder){}
+
+  @ViewChild('categoryFormDirective') public categoryFormDirective!: FormGroupDirective;
+
+  public isFormReady = false;
+
+  constructor(private formBuilder: FormBuilder,
+              private categoryService: CategoryService,
+              private snackBarService: SnackBarService){}
 
   ngOnInit() {
     this.categoryForm = this.formBuilder.group({
@@ -26,12 +35,38 @@ export class CategoryFormComponent {
   }
 
   public cancel(){
-    console.log('Cancelar clicado');
     this.closeModalEventEmitter.emit(true);
   }
 
   public save(){
-    console.log('Salvar clicado');
-    this.closeModalEventEmitter.emit(true);
+
+
+    if((this.categoryForm.valid)){
+      if(this.actionName === 'Editar'){
+
+        var updatedCategory = {
+          guid: this.editableCategory.guid,
+          name: this.categoryForm.value.name
+        }
+          this.categoryService.updateCategory(updatedCategory).subscribe(
+            (resp: any) => {
+              this.closeModalEventEmitter.emit(true);
+            }, (err: any) =>{
+              this.snackBarService.showSnackBar('Não foi possível atualizar a categoria. Tente novamente!', 'Ok');
+            });
+      }else{
+        this.categoryService.saveCategory(this.categoryForm.value).subscribe(
+          (resp: any) => {
+            this.closeModalEventEmitter.emit(true);
+          }, (err: any) =>{
+            this.snackBarService.showSnackBar('Não foi possível criar uma nova categoria. Tente novamente!', 'Ok');
+          });
+      }
+    }
+  }
+
+  public clearForm(){
+    this.categoryForm.reset();
+    this.categoryFormDirective.resetForm();
   }
 }
