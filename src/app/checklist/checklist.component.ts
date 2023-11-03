@@ -23,49 +23,62 @@ export class ChecklistComponent {
               private checklistService: ChecklistService,
               private snackBarService: SnackBarService){}
   ngOnInit() {
+    this.loadAllChecklistItems();
+  }
+
+  private loadAllChecklistItems(){
     this.checklistService.getAllChecklistItems().subscribe(
       (resp: ChecklistItem[]) => {
         this.dataSource = resp;
+      }, (error: any) => {
+        console.log(`Ocorreu um erro ao chamar a API: ${error}`);
       });
   }
 
   public createNewItem(){
-    console.log('Novo Item do checklist clicado');
     this.dialog.open(ChecklistEditComponent, {
       disableClose: true, data: { actionName: 'Criar'},
     }).afterClosed().subscribe(resp => {
-      console.log('Fechando modal da criação do item do checklist');
       if (resp) {
-        this.snackBarService.showSnackBar('Item do checklist criado com sucesso!', 'Ok');
+        this.loadAllChecklistItems();
       }
     });
   }
 
-  public updateCompleteStatus(status: boolean){
-    console.log(`Status do item do checklist atualizado para ${status}`);
-
+  public updateCompleteStatus(guid: string, status: boolean){
+    this.checklistService.updateCompleteStatus(guid, status).subscribe(
+      (resp: any) => {
+        this.snackBarService.showSnackBar('Item atualizado com sucesso!', 'Ok');
+        this.loadAllChecklistItems();
+      }, error => {
+        this.snackBarService.showSnackBar('Erro ao atualizar status do item do checklist. Tente novamente!', 'Ok');
+      }
+    );
   }
+
   public updateChecklistItem(checklistItem: ChecklistItem){
-    console.log('Item do checklist atualizado');
     this.dialog.open(ChecklistEditComponent, {
       disableClose: true, data: { updatableChecklistItem: checklistItem, actionName: 'Editar'},
     }).afterClosed().subscribe(resp => {
-      console.log('Fechando modal da edição do item do checklist');
       if (resp) {
-        this.snackBarService.showSnackBar('Item do checklist editado com sucesso!', 'Ok');
+        this.loadAllChecklistItems();
       }
     });
   }
 
-  public deleteChecklisItem(chelist: ChecklistItem){
-    console.log('Item do checklist excluído');
+  public deleteChecklisItem(checklistItem: ChecklistItem){
     this.dialog.open(DialogComponent, {
       disableClose: true, data: {dialogMsg: 'Você deseja realmente apagar esse item?',
       leftButtonLabe: 'Cancelar', rightButtonLabel: 'Ok'}
     }).afterClosed().subscribe(resp => {
-      console.log('Janela modal confirmar apagar');
       if (resp) {
-        this.snackBarService.showSnackBar('Item do checklist apagado com sucesso!', 'Ok');
+        this.checklistService.deleteChecklistItems(checklistItem.guid).subscribe(
+          (resp: any) => {
+            this.snackBarService.showSnackBar('Item do checklist apagado com sucesso!', 'Ok');
+            this.loadAllChecklistItems();
+          }, (error: any) => {
+            this.snackBarService.showSnackBar('Erro ao apagar item do checklist. Tente novamente!', 'Ok');
+          });
       }
     });
   }

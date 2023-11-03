@@ -19,7 +19,6 @@ export class CategoryFormComponent {
 
   @Input() public editableCategory!: Category;
 
-
   @ViewChild('categoryFormDirective') public categoryFormDirective!: FormGroupDirective;
 
   public isFormReady = false;
@@ -39,7 +38,6 @@ export class CategoryFormComponent {
   }
 
   public save(){
-
 
     if((this.categoryForm.valid)){
       if(this.actionName === 'Editar'){
