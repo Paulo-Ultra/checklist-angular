@@ -16,7 +16,7 @@ export class ChecklistComponent {
 
   public dataSource: ChecklistItem[] = [];
   public displayedColumns: string[] = [
-    'id', 'completed', 'description', 'deadline', 'postDate', 'category', 'actions'
+    'id', 'isCompleted', 'description', 'deadline', 'postDate', 'category', 'actions'
   ];
 
   constructor(private dialog: MatDialog,
